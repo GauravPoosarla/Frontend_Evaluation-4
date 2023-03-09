@@ -1,65 +1,161 @@
-.login-wrapper {
-  min-height: 100vh;
+.login {
   display: flex;
+  flex-direction: row;
+}
+
+.login-left {
+  width: 65%;
+  display: flex;
+  flex-direction: column;;
+  align-items: center;
+  background-color: rgba(231, 227, 246, 0.519);
+  padding-bottom: 50px;
+}
+
+.login-left-text {
+  padding-left: 100px;
+  align-self: flex-start;
+  font-family: 'Montserrat', sans-serif;
+  color: rgb(53, 52, 52);
+  font-weight: 600;
+  display: flex;
+  flex-direction: row;
+}
+
+.login-left-text-title {
+  margin-top: 100px;
+  margin-bottom: 20px;
+}
+
+.login-left-text .circle {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background-color: white;
+  position: absolute;
+  margin-left: 135px;
+}
+
+.login-left-img img {
+  width: 500px;
+  height: 400px;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
 }
-.form-container {
-  width: 250px;
-  height: 200px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  background-color: black;
-  border-radius: 10px;
+
+.login-left-text .small-circle {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-color: white;
+  position: absolute;
+  margin-top: 130px;
+  margin-left: 450px;
 }
-.form-input {
+
+
+
+.login-left-lower-circles .circle {
   width: 150px;
-  height: 20px;
-  /* margin: 10px 0 10px 0; */
-  font-size: 10px;
-  padding-left: 10px;
-  border-radius: 5px;
-  border: none;
+  height: 150px;
+  border-radius: 50%;
+  background-color: white;
+  position: absolute;
+  position: relative;
+  margin-top: -80px;
+  margin-left: -380px;
 }
-.form {
+
+.login-left-lower-circles .small-circle {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-color: white;
+  position: absolute;
+  margin-left: -250px;
+  margin-top: -35px;
+}
+
+.login-right {
+  width: 35%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 30px;
-  /* align-items: ; */
+  background-color: rgba(10, 7, 10, 0.911);
+  justify-content: center;
+  padding-top: 50px;
 }
-/* form-input:focus{outline: none;} */
-.no-outline:focus {
-  outline: none;
+
+.login-right-text {
+  font-family: 'Montserrat', sans-serif;
+  color: white;
+  font-weight: 600;
+  font-size: 10px;
 }
-.submit-button {
-  width: 60px;
-  height: 20px;
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 50px;
+}
+
+.form-container form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.form-container form input {
+  width: 200px;
+  height: 30px;
   border-radius: 5px;
   border: none;
-  cursor: pointer;
-  font-size: 12px;
-  /* font-weight: bold; */
+  margin-bottom: 20px;
+  padding-left: 10px;
 }
-.confirmation-text {
-  margin-bottom: 10px;
+
+.form-container form label {
+  font-family: 'Montserrat', sans-serif;
+  color: rgba(255, 255, 255, 0.644);
 }
+
+.form-container form button {
+  width: 200px;
+  height: 30px;
+  border-radius: 5px;
+  border: none;
+  background-color: rgb(125, 71, 180);
+  color: white;
+  font-family: 'Montserrat', sans-serif;
+  margin-bottom: 20px;
+  font-size: 10px;
+  margin-left: 5px;
+}
+
 .login-confirmation {
-  color: white;
-  font-size: 12px;
+  padding-left: 50px;
 }
+
 .register-confirmation {
-  color: white;
-  font-size: 12px;
+  padding-left: 50px;
 }
+
 .login-text {
-  color: blue;
+  color: rgb(18, 18, 226);
   cursor: pointer;
 }
+
 .register-text {
-  color: blue;
+  color: rgb(18, 18, 226);
   cursor: pointer;
+}
+
+.login-confirmation {
+  margin-right: 20px;
+}
+
+.register-confirmation {
+  margin-right: 20px;
 }

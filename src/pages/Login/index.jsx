@@ -1,22 +1,29 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './Login.css';
-import axios from 'axios';
+import loginImage from '../../assets/undraw-upload-re-pasx@3x.png';
 import { useNavigate } from 'react-router-dom';
-export default function Login() {
+import { useState } from 'react';
+import axios from 'axios';
+
+const Login = () => {
   const navigate = useNavigate();
   const [haveAccount, setHaveAccount] = useState(false);
+
   const [formData, setFormData] = useState({
-    userName: '',
+    email: '',
     password: '',
   });
+
   const [registerFormData, setRegisterFormData] = useState({
-    userName: '',
+    email: '',
     password: '',
     confirmPassword: '',
   });
+
   const handleAccountConfirmationClick = () => {
-    setHaveAccount(previousValue => !previousValue);
+    setHaveAccount(!haveAccount);
   };
+
   const handleRegisterDetailChange = event => {
     const { name, value } = event.target;
     setRegisterFormData(previousData => ({
@@ -24,6 +31,7 @@ export default function Login() {
       [name]: value,
     }));
   };
+
   const handleChange = event => {
     const { name, value } = event.target;
     setFormData(previousData => ({
@@ -31,19 +39,22 @@ export default function Login() {
       [name]: value,
     }));
   };
+
   const handleRegisterSubmit = event => {
     event.preventDefault();
     if (registerFormData.password === registerFormData.confirmPassword) {
       callCreateUserAPI(registerFormData);
     }
   };
+
   const handleLoginSubmit = event => {
     event.preventDefault();
     sendLoginData(formData);
   };
+
   const sendLoginData = async loginCredentials => {
-    var data = {
-      userName: loginCredentials.userName,
+    let data = {
+      email: loginCredentials.email,
       password: loginCredentials.password,
     };
     const response = await axios.post(
@@ -51,107 +62,137 @@ export default function Login() {
       { data },
       { headers: { 'Content-Type': 'application/json' } }
     );
-    console.log('RESPONSE: ', response);
-    if (response.data.message === 'logged in successfully') {
-      localStorage.setItem('token', response.data.token);
-      console.log('SET LOCALSTOGARE ', localStorage.getItem('token'));
-      navigate('/home');
-    }
+    localStorage.setItem('token', response.data);
+    alert('login successfull');
+    navigate('/home');
   };
+
   const callCreateUserAPI = async userDetails => {
-    var data = {
-      userName: userDetails.userName,
+    let data = {
+      email: userDetails.email,
       password: userDetails.password,
     };
     const response = await axios.post(
-      'http://localhost:8000/create',
+      'http://localhost:8000/register',
       { data },
       { headers: { 'Content-Type': 'application/json' } }
     );
-    if (response.data.message === 'user alredy exist') {
-      console.log('user alredy exist');
+    if (response.status === 200) {
+      alert('User created successfully');
     }
   };
-  // const tokenGOT = localStorage.getItem('token')
+
   return (
-    <div className='login-wrapper'>
-      {/* <Header /> */}
-      <div className='form-container'>
-        {haveAccount && (
-          <form className='form' onSubmit={handleLoginSubmit}>
-            <input
-              type='username'
-              className='form-input'
-              placeholder='UserName'
-              value={formData.userName}
-              name='userName'
-              onChange={handleChange}
-            />
-            <br />
-            <input
-              type='password'
-              className='form-input'
-              placeholder='Password'
-              value={formData.password}
-              name='password'
-              onChange={handleChange}
-            />
-            <br />
-            <button className='submit-button'>Login</button>
-          </form>
-        )}
-        {!haveAccount && (
-          <form className='form' onSubmit={handleRegisterSubmit}>
-            <input
-              type='username'
-              className='form-input'
-              placeholder='UserName'
-              value={registerFormData.userName}
-              name='userName'
-              onChange={handleRegisterDetailChange}
-            />
-            <br />
-            <input
-              type='password'
-              className='form-input'
-              placeholder='Password'
-              value={registerFormData.password}
-              name='password'
-              onChange={handleRegisterDetailChange}
-            />
-            <br />
-            <input
-              type='password'
-              className='form-input'
-              placeholder='Confirm Password'
-              value={registerFormData.confirmPassword}
-              name='confirmPassword'
-              onChange={handleRegisterDetailChange}
-            />
-            <br />
-            <button className='submit-button'>Register</button>
-          </form>
-        )}
-        <div className='confirmation-text'>
-          {!haveAccount && (
-            <span className='login-confirmation'>
-              Already have an account?{' '}
-              <span className='login-text' onClick={handleAccountConfirmationClick}>
-                Login
-              </span>
-            </span>
-          )}
-          {haveAccount && (
-            <span className='register-confirmation'>
-              Dont have an account?{' '}
-              <span className='register-text' onClick={handleAccountConfirmationClick}>
-                Register
-              </span>
-            </span>
-          )}
+    <div className='login'>
+      <div className='login-left'>
+        <div className='login-left-text'>
+          <div className='login-left-text-title'>
+            <h1>Design APIs fast,</h1>
+            <h1>Manage content easily.</h1>
+          </div>
+          <div className='circles'>
+            <div className='circle'></div>
+          </div>
+          <div className='small-circle'></div>
+        </div>
+        <div className='login-left-img'>
+          <img src={loginImage} alt='login' />
+        </div>
+        <div className='login-left-lower-circles'>
+          <div className='circle'></div>
+          <div className='small-circle'></div>
         </div>
       </div>
-      {/* <Footer /> */}
+      <div className='login-right'>
+        <div className='login-right-text'>
+          {haveAccount ? (
+            <div>
+              <h1>Login to your CMS+ account</h1>
+              <div className='form-container'>
+                <form onSubmit={handleLoginSubmit}>
+                  <label htmlFor='email'>Email</label>
+                  <br />
+                  <input
+                    type='email'
+                    className='form-input'
+                    value={formData.userName}
+                    name='email'
+                    onChange={handleChange}
+                  />
+                  <label htmlFor='password'>Password</label>
+                  <br />
+                  <input
+                    type='password'
+                    className='form-input'
+                    placeholder='Password'
+                    value={formData.password}
+                    name='password'
+                    onChange={handleChange}
+                  />
+                  <br />
+                  <button type='submit'>Login</button>
+                </form>
+              </div>
+            </div>
+          ) : (
+            <div>
+              <h1>Register your CMS+ account</h1>
+              <div className='form-container'>
+                <form onSubmit={handleRegisterSubmit}>
+                  <label htmlFor='email'>Email</label>
+                  <br />
+                  <input
+                    type='email'
+                    className='form-input'
+                    value={registerFormData.userName}
+                    name='email'
+                    onChange={handleRegisterDetailChange}
+                  />
+                  <label htmlFor='password'>Password</label>
+                  <br />
+                  <input
+                    type='password'
+                    className='form-input'
+                    value={registerFormData.password}
+                    name='password'
+                    onChange={handleRegisterDetailChange}
+                  />
+                  <label htmlFor='confirmPassword'>Confirm Password</label>
+                  <br />
+                  <input
+                    type='password'
+                    className='form-input'
+                    value={registerFormData.confirmPassword}
+                    name='confirmPassword'
+                    onChange={handleRegisterDetailChange}
+                  />
+                  <button type='submit'>Register</button>
+                </form>
+              </div>
+            </div>
+          )}
+          <div className='confirmation-text'>
+            {!haveAccount && (
+              <span className='login-confirmation'>
+                Already have an account?{' '}
+                <span className='login-text' onClick={handleAccountConfirmationClick}>
+                  Login
+                </span>
+              </span>
+            )}
+            {haveAccount && (
+              <span className='register-confirmation'>
+                Dont have an account?{' '}
+                <span className='register-text' onClick={handleAccountConfirmationClick}>
+                  Register
+                </span>
+              </span>
+            )}
+          </div>
+        </div>
+      </div>
     </div>
   );
-}
+};
+
+export default Login;
