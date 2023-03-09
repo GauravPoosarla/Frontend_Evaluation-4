@@ -7,7 +7,7 @@ import axios from 'axios';
 
 const Login = () => {
   const navigate = useNavigate();
-  const [haveAccount, setHaveAccount] = useState(false);
+  const [haveAccount, setHaveAccount] = useState(true);
 
   const [formData, setFormData] = useState({
     email: '',
@@ -124,7 +124,6 @@ const Login = () => {
                   <input
                     type='password'
                     className='form-input'
-                    placeholder='Password'
                     value={formData.password}
                     name='password'
                     onChange={handleChange}
