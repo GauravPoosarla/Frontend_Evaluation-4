@@ -2,6 +2,7 @@ import React from 'react';
 import { useEffect, useState } from 'react';
 import Search from '../../assets/icon-search-dark@3x.png';
 import FieldRenderer from '../FieldRenderer';
+import PopUp from '../PopUp';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import './MainContent.css';
@@ -10,6 +11,8 @@ const MainContent = () => {
   const [collections, setCollections] = useState([]);
   const [clickedId, setClickedId] = useState(null);
   const [fields, setFields] = useState([]);
+  const [isAddEditFieldOverlay, setIsAddEditFieldOverlay] = useState(false);
+
   useEffect(() => {
     axios
       .get('http://localhost:8001/all-collections', {
@@ -39,8 +42,13 @@ const MainContent = () => {
     setClickedId(clickedCollection.id);
   };
 
+  const contentHandler = () => {
+    setIsAddEditFieldOverlay(true);
+  };
+
   return (
     <div className='main-content'>
+      {isAddEditFieldOverlay && <PopUp setIsAddEditFieldOverlay={setIsAddEditFieldOverlay} />}
       <div className='main-content-left'>
         <div className='main-content-header'>
           <h1>Content Types</h1>
@@ -54,7 +62,9 @@ const MainContent = () => {
             <img src={Search} alt='search' />
           </div>
           <br />
-          <button className='main-content-add-button'>+ New Type</button>
+          <button className='main-content-add-button' onClick={contentHandler}>
+            + New Type
+          </button>
           {collections.map((collection, idx) => (
             <div key={idx}>
               <button className='content-button' name={collection.collection_name} onClick={clickHandler}>
