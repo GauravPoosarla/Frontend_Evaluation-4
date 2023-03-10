@@ -23,9 +23,10 @@ export default function PopUpUpdateContentName(props) {
   console.log(collectionId);
 
   const handleClickAdd = async () => {
-    const response = await axios.post(
+    console.log(newFieldName.field);
+    const response = await axios.put(
       `http://localhost:8001/update-collection/${collectionId}`,
-      { field: newFieldName.field },
+      { collectionName: newFieldName.field },
       { headers: { authorization: localStorage.getItem('token') } }
     );
     props.setIsEditFieldOverlay(false);
