@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import './CollectionsSidebar.css';
 
 const CollectionsSidebar = props => {
-  const { setIsCollectionPage, setCollectionName } = props;
+  const { setIsCollectionPage, setCollectionId, setCollectionName } = props;
   const [collections, setCollections] = useState([]);
   useEffect(() => {
     axios
@@ -31,12 +31,13 @@ const CollectionsSidebar = props => {
         </div>
         <br />
         <ul className='sidebar-collections'>
-          {collections.map(collection => (
+          {collections.map((collection, index) => (
             <>
               <li
-                key={collection.id}
+                key={index}
                 onClick={() => {
                   setIsCollectionPage(true);
+                  setCollectionId(collection.collection_id);
                   setCollectionName(collection.collection_name);
                 }}>
                 {collection.collection_name}
@@ -55,6 +56,7 @@ const CollectionsSidebar = props => {
 
 CollectionsSidebar.propTypes = {
   setIsCollectionPage: PropTypes.func.isRequired,
+  setCollectionId: PropTypes.func.isRequired,
   setCollectionName: PropTypes.func.isRequired,
 };
 

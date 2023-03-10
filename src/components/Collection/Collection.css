@@ -1,0 +1,80 @@
+.Collections {
+  background-color: rgba(165, 154, 186, 0.674);
+  min-height: 800px;
+}
+.Collections-header {
+  height: 50px;
+  font-size: 30px;
+  padding-left: 20px;
+  color: rgb(58, 58, 58);
+  padding-top: 5px;
+}
+
+.Collections-content-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.Collections-content-header-count-left {
+  font-size: 30px;
+  font-weight: 600;
+  color: rgb(58, 58, 58);
+}
+
+.Collections-content-header-count-right {
+  color: rgb(22, 1, 112);
+}
+
+.Collections-content-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-right: 30px;
+}
+
+.Collections-content-main-field {
+  margin-top: 20px;
+  font-size: 15px;
+  display: flex;
+  gap: 10px;
+}
+
+.Collections-content-main-field .field {
+  margin-left: 40px;
+  color: rgb(78, 73, 73)
+}
+
+.Collections-content-main-field-values {
+  width: 860px;
+  height: 40px;
+  background-color: white;
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 20px;
+  color:rgba(88, 88, 88, 0.7);
+  margin-left: 20px;
+  padding-right: 20px;
+}
+
+.Collections-content-main-field-values img {
+  width: 10px;
+  height: 10px;
+  cursor: pointer;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+}
+
+.action-header {
+  font-size: 15px;
+  cursor: pointer;
+  color: rgb(58, 58, 58);
+  padding-top: 15px;
+}
