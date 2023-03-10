@@ -1,9 +1,9 @@
 .side-bar {
+  height: 100%;
   min-height: 800px;
   background-color: black;
   color: white;
   box-sizing: border-box;
-  overflow-y: scroll;
 }
 
 .side-bar-header {

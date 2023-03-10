@@ -7,6 +7,7 @@ const Home = () => {
   const [isCollectionPage, setIsCollectionPage] = React.useState(false);
   const [collectionId, setCollectionId] = React.useState('');
   const [collectionName, setCollectionName] = React.useState('');
+
   return (
     <div className='home'>
       <div className='home-sidebar'>

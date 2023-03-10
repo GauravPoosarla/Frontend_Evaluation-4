@@ -8,6 +8,7 @@ import PropTypes from 'prop-types';
 import Edit from '../../assets/user-pencil-write-ui-education@3x.png';
 import Delete from '../../assets/trash-delete-recycle-bin-bucket-waste@3x.png';
 import AddNewEntry from '../AddNewEntry';
+import EditEntry from '../EditEntry';
 
 const Collections = props => {
   const { collectionId, collectionName } = props;
@@ -15,6 +16,7 @@ const Collections = props => {
   const [isAddEditFieldOverlay, setIsAddEditFieldOverlay] = useState(false);
   const [onChanged, setOnChanged] = useState(false);
   const [entryModalVisibility, setEntryModalVisibility] = useState(false);
+  const [contentId, setContentId] = useState(null);
 
   useEffect(() => {
     axios
@@ -28,7 +30,6 @@ const Collections = props => {
 
   if (collectionData == null) return <p>Loading..</p>;
 
-  console.log(collectionData);
   const uniqueFields = [];
   {
     collectionData.data.map(item => {
@@ -42,18 +43,45 @@ const Collections = props => {
 
   const addEventHandler = () => {
     setEntryModalVisibility(true);
-    // axios call to add the field: TODO
   };
 
-  const editHandler = () => {
+  const editHandler = contentId => {
     setIsAddEditFieldOverlay(true);
-    // axios call to edit the field: TODO
+    setContentId(contentId);
   };
 
-  console.log(uniqueFields);
+  const deleteHandler = contentId => {
+    axios
+      .delete(`http://localhost:8001/delete-content/${contentId}`, {
+        headers: { authorization: localStorage.getItem('token') },
+      })
+      .then(response => {
+        console.log(response.data);
+        setOnChanged(!onChanged);
+      });
+  };
+
   return (
     <div className='Collections'>
-      {entryModalVisibility && <AddNewEntry setEntryModalVisibility={setEntryModalVisibility} />}
+      {entryModalVisibility && (
+        <AddNewEntry
+          setEntryModalVisibility={setEntryModalVisibility}
+          collectionId={collectionId}
+          collectionName={collectionName}
+          setOnChanged={setOnChanged}
+          onChanged={onChanged}
+        />
+      )}
+      {isAddEditFieldOverlay && (
+        <EditEntry
+          setIsAddEditFieldOverlay={setIsAddEditFieldOverlay}
+          collectionId={collectionId}
+          collectionName={collectionName}
+          setOnChanged={setOnChanged}
+          onChanged={onChanged}
+          contentId={contentId}
+        />
+      )}
       <div className='Collections-header'>
         <span className='Collections-header-name'>{collectionName}</span>
       </div>
@@ -72,29 +100,37 @@ const Collections = props => {
               </div>
             );
           })}
-          {uniqueFields.length > 0 && <p className='field'>Actions</p>}
+          {uniqueFields.length > 0 && <p className='field-actions'>Actions</p>}
         </div>
-        <div>
+        <div className='rows'>
           {collectionData.data.map((item, index) => {
             return (
-              <div key={index} className='Collections-content-main-field'>
+              <div key={index} className='Collections-content-main-field-values'>
                 {uniqueFields.map((field, index) => {
                   return (
-                    <div key={index} className='Collections-content-main-field-values'>
-                      <p>{item.values[field]}</p>
-                      <div className='actions'>
-                        <img
-                          src={Edit}
-                          alt='edit'
-                          onClick={() => {
-                            editHandler(collectionData.data.content_id);
-                          }}
-                        />
-                        <img src={Delete} alt='delete' />
+                    <div>
+                      <div key={index} className='Collections-content-main'>
+                        <p>{item.values[field]}</p>
                       </div>
                     </div>
                   );
                 })}
+                <div className='actions'>
+                  <img
+                    src={Edit}
+                    alt='edit'
+                    onClick={() => {
+                      editHandler(collectionData.data[index].content_id);
+                    }}
+                  />
+                  <img
+                    src={Delete}
+                    alt='delete'
+                    onClick={() => {
+                      deleteHandler(collectionData.data[index].content_id);
+                    }}
+                  />
+                </div>
               </div>
             );
           })}

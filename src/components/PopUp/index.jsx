@@ -28,6 +28,7 @@ export default function PopUp(props) {
       )
       .then(response => {
         setOnChanged(!onChanged);
+        // window.location.reload();
       });
     props.setIsAddEditFieldOverlay(false);
   };

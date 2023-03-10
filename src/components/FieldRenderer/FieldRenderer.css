@@ -5,6 +5,7 @@
 
 .field-renderer-fields {
   background-color: rgba(115, 115, 146, 0.412);
+  height: 100%;
   min-height: 800px;
 }
 
