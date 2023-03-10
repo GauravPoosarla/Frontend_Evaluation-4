@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import './PopUp.css';
 export default function PopUpEditField(props) {
-  const { onChanged, setOnChanged, fieldId } = props;
+  const { onChanged, setOnChanged } = props;
   const [newFieldName, setNewFieldName] = useState({
     field: '',
   });
@@ -18,9 +18,9 @@ export default function PopUpEditField(props) {
       field: event.target.value,
     }));
   };
-  const handleClickEdit = async () => {
-    const response = await axios.put(
-      `http://localhost:8001/update-content-field/${props.fieldId}`,
+  const handleClickAdd = async () => {
+    const response = await axios.post(
+      `http://localhost:8001/create-content-fields/${props.clickedId}`,
       { field: newFieldName.field },
       { headers: { authorization: localStorage.getItem('token') } }
     );
@@ -31,7 +31,7 @@ export default function PopUpEditField(props) {
     <div className='add-edit-overlay-wrapper'>
       <div className='add-edit-overlay-content'>
         <div className='add-edit-overlay-top'>
-          <span className='header-top'>Edit Field</span>
+          <span className='header-top'>Add Field</span>
         </div>
         <div className='add-edit-overlay-middle'>
           <span className='add-edit-overlay-content-name'>Field Name</span>
@@ -46,7 +46,7 @@ export default function PopUpEditField(props) {
           <span className='add-edit-overlay-cancel-button' onClick={handleClickCancel}>
             Cancel
           </span>
-          <span className='add-edit-overlay-add-button' onClick={handleClickEdit}>
+          <span className='add-edit-overlay-add-button' onClick={handleClickAdd}>
             Add
           </span>
         </div>

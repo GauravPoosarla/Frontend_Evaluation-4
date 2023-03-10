@@ -52,7 +52,7 @@ const FieldRenderer = ({ collections, fields, clickedId, onChanged, setOnChanged
           setOnChanged={setOnChanged}
         />
       )}
-      {false && (
+      {isEditFieldOverlay && (
         <PopUpEditField
           collections={collections}
           clickedId={clickedId}
