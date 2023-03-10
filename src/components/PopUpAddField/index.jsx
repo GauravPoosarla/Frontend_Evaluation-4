@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import './PopUp.css';
 export default function PopUpAddField(props) {
+  const { onChanged, setOnChanged } = props;
   const [newFieldName, setNewFieldName] = useState({
     field: '',
   });
@@ -18,13 +19,13 @@ export default function PopUpAddField(props) {
     }));
   };
   const handleClickAdd = async () => {
-    console.log(newFieldName.field);
     const response = await axios.post(
       `http://localhost:8001/create-content-fields/${props.clickedId}`,
       { field: newFieldName.field },
       { headers: { authorization: localStorage.getItem('token') } }
     );
     props.setIsAddEditFieldOverlay(false);
+    setOnChanged(!onChanged);
   };
   return (
     <div className='add-edit-overlay-wrapper'>
@@ -56,4 +57,6 @@ export default function PopUpAddField(props) {
 PopUpAddField.propTypes = {
   setIsAddEditFieldOverlay: PropTypes.func.isRequired,
   clickedId: PropTypes.string.isRequired,
+  onChanged: PropTypes.bool.isRequired,
+  setOnChanged: PropTypes.func.isRequired,
 };

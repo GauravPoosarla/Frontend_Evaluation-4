@@ -12,6 +12,7 @@ const MainContent = () => {
   const [clickedId, setClickedId] = useState(null);
   const [fields, setFields] = useState([]);
   const [isAddEditFieldOverlay, setIsAddEditFieldOverlay] = useState(false);
+  const [onChanged, setOnChanged] = useState(false);
 
   useEffect(() => {
     axios
@@ -21,21 +22,19 @@ const MainContent = () => {
       .then(response => {
         setCollections(response.data);
       });
-  }, []);
+  }, [onChanged]);
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:8001/get-content-fields/${clickedId}`, {
-        headers: { authorization: localStorage.getItem('token') },
-      })
-      .then(response => {
-        const fieldsResponse = [];
-        response.data.forEach(field => {
-          fieldsResponse.push(field.fields);
+    if (clickedId) {
+      axios
+        .get(`http://localhost:8001/get-content-fields/${clickedId}`, {
+          headers: { authorization: localStorage.getItem('token') },
+        })
+        .then(response => {
+          setFields(response.data.map(field => field.fields));
         });
-        setFields(fieldsResponse);
-      });
-  }, [clickedId]);
+    }
+  }, [clickedId, onChanged]);
 
   const clickHandler = event => {
     const clickedCollection = collections.find(collection => collection.collection_name === event.target.name);
@@ -48,7 +47,9 @@ const MainContent = () => {
 
   return (
     <div className='main-content'>
-      {isAddEditFieldOverlay && <PopUp setIsAddEditFieldOverlay={setIsAddEditFieldOverlay} />}
+      {isAddEditFieldOverlay && (
+        <PopUp setIsAddEditFieldOverlay={setIsAddEditFieldOverlay} onChanged={onChanged} setOnChanged={setOnChanged} />
+      )}
       <div className='main-content-left'>
         <div className='main-content-header'>
           <h1>Content Types</h1>
@@ -76,7 +77,15 @@ const MainContent = () => {
         </div>
       </div>
       <div className='main-content-right'>
-        {clickedId && <FieldRenderer collections={collections} fields={fields} clickedId={clickedId} />}
+        {clickedId && (
+          <FieldRenderer
+            collections={collections}
+            fields={fields}
+            clickedId={clickedId}
+            onChanged={onChanged}
+            setOnChanged={setOnChanged}
+          />
+        )}
       </div>
     </div>
   );

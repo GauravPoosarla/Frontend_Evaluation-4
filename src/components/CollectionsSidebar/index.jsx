@@ -3,9 +3,11 @@ import axios from 'axios';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import Search from '../../assets/icon-search-dark@3x.png';
+import PropTypes from 'prop-types';
 import './CollectionsSidebar.css';
 
-const CollectionsSidebar = () => {
+const CollectionsSidebar = props => {
+  const { setIsCollectionPage, setCollectionName } = props;
   const [collections, setCollections] = useState([]);
   useEffect(() => {
     axios
@@ -16,6 +18,7 @@ const CollectionsSidebar = () => {
         setCollections(response.data);
       });
   }, []);
+
   return (
     <div className='side-bar'>
       <div className='side-bar-header'>
@@ -30,7 +33,14 @@ const CollectionsSidebar = () => {
         <ul className='sidebar-collections'>
           {collections.map(collection => (
             <>
-              <li key={collection.id}>{collection.collection_name}</li>
+              <li
+                key={collection.id}
+                onClick={() => {
+                  setIsCollectionPage(true);
+                  setCollectionName(collection.collection_name);
+                }}>
+                {collection.collection_name}
+              </li>
               <br />
             </>
           ))}
@@ -41,6 +51,11 @@ const CollectionsSidebar = () => {
       </div>
     </div>
   );
+};
+
+CollectionsSidebar.propTypes = {
+  setIsCollectionPage: PropTypes.func.isRequired,
+  setCollectionName: PropTypes.func.isRequired,
 };
 
 export default CollectionsSidebar;

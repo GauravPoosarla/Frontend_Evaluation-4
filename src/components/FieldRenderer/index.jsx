@@ -1,15 +1,18 @@
+/* eslint-disable no-unused-vars */
 import React from 'react';
 import PropTypes from 'prop-types';
 import './FieldRenderer.css';
 import Edit from '../../assets/user-edit-text-message-note@3x.png';
 import Delete from '../../assets/trash-delete-recycle-bin-bucket-waste@3x.png';
 import PopUpAddField from '../PopUpAddField';
+import PopUpEditField from '../PopUpEditField';
 import { useState } from 'react';
 import axios from 'axios';
 
-const FieldRenderer = ({ collections, fields, clickedId }) => {
+const FieldRenderer = ({ collections, fields, clickedId, onChanged, setOnChanged }) => {
   const content = collections.find(collection => collection.id === clickedId);
   const [isAddEditFieldOverlay, setIsAddEditFieldOverlay] = useState(false);
+  const [isEditFieldOverlay, setIsEditFieldOverlay] = useState(false);
   const [field, setField] = useState('');
 
   const addHandler = () => {
@@ -20,12 +23,17 @@ const FieldRenderer = ({ collections, fields, clickedId }) => {
     const response = await axios.get(`http://localhost:8001/get-content-fields/${clickedId}`, {
       headers: { authorization: localStorage.getItem('token') },
     });
-    console.log(response);
     const fieldId = response.data.find(fieldContent => fieldContent.fields === field).field_id;
     await axios.delete(`http://localhost:8001/delete-content-field/${fieldId}`, {
       headers: { authorization: localStorage.getItem('token') },
     });
+    setOnChanged(!onChanged);
   };
+
+  const editHandler = () => {
+    setIsEditFieldOverlay(true);
+  };
+
   return (
     <div className='field-renderer'>
       {isAddEditFieldOverlay && (
@@ -33,6 +41,18 @@ const FieldRenderer = ({ collections, fields, clickedId }) => {
           collections={collections}
           clickedId={clickedId}
           setIsAddEditFieldOverlay={setIsAddEditFieldOverlay}
+          onChanged={onChanged}
+          setOnChanged={setOnChanged}
+        />
+      )}
+      {isEditFieldOverlay && (
+        <PopUpEditField
+          collections={collections}
+          clickedId={clickedId}
+          setIsEditFieldOverlay={setIsEditFieldOverlay}
+          onChanged={onChanged}
+          setOnChanged={setOnChanged}
+          field={field}
         />
       )}
       <div className='field-renderer-header'>
@@ -51,7 +71,7 @@ const FieldRenderer = ({ collections, fields, clickedId }) => {
             <button className='field-renderer-button' key={idx}>
               <div>{field}</div> <div className='field-renderer-button-text'>{'Text'}</div>
               <div>
-                <img src={Edit} alt='edit' />{' '}
+                <img src={Edit} alt='edit' onClick={editHandler} />{' '}
                 <img
                   src={Delete}
                   alt='delete'
@@ -72,6 +92,8 @@ FieldRenderer.propTypes = {
   collections: PropTypes.array.isRequired,
   fields: PropTypes.array.isRequired,
   clickedId: PropTypes.number.isRequired,
+  onChanged: PropTypes.bool.isRequired,
+  setOnChanged: PropTypes.func.isRequired,
 };
 
 export default FieldRenderer;

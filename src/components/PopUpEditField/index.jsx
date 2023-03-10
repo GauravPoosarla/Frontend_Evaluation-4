@@ -3,15 +3,14 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import './PopUp.css';
-export default function PopUp(props) {
+export default function PopUpEditField(props) {
   const { onChanged, setOnChanged } = props;
-  const [onChange, setOnChange] = useState(false);
   const [newFieldName, setNewFieldName] = useState({
     field: '',
   });
 
   const handleClickCancel = () => {
-    props.setIsAddEditFieldOverlay(false);
+    props.setIsEditFieldOverlay(false);
   };
   const handleChangeFieldName = event => {
     setNewFieldName(previousData => ({
@@ -20,25 +19,22 @@ export default function PopUp(props) {
     }));
   };
   const handleClickAdd = async () => {
-    const response = await axios
-      .post(
-        'http://localhost:8001/create-collection',
-        { collectionName: newFieldName.field },
-        { headers: { authorization: localStorage.getItem('token') } }
-      )
-      .then(response => {
-        setOnChanged(!onChanged);
-      });
-    props.setIsAddEditFieldOverlay(false);
+    const response = await axios.post(
+      `http://localhost:8001/create-content-fields/${props.clickedId}`,
+      { field: newFieldName.field },
+      { headers: { authorization: localStorage.getItem('token') } }
+    );
+    props.setIsEditFieldOverlay(false);
+    setOnChanged(!onChanged);
   };
   return (
     <div className='add-edit-overlay-wrapper'>
       <div className='add-edit-overlay-content'>
         <div className='add-edit-overlay-top'>
-          <span className='header-top'>Add Content Type</span>
+          <span className='header-top'>Add Field</span>
         </div>
         <div className='add-edit-overlay-middle'>
-          <span className='add-edit-overlay-content-name'>Content Name</span>
+          <span className='add-edit-overlay-content-name'>Field Name</span>
           <input
             type='text'
             value={newFieldName.field}
@@ -58,8 +54,9 @@ export default function PopUp(props) {
     </div>
   );
 }
-PopUp.propTypes = {
-  setIsAddEditFieldOverlay: PropTypes.func.isRequired,
+PopUpEditField.propTypes = {
+  setIsEditFieldOverlay: PropTypes.func.isRequired,
+  clickedId: PropTypes.string.isRequired,
   onChanged: PropTypes.bool.isRequired,
   setOnChanged: PropTypes.func.isRequired,
 };
