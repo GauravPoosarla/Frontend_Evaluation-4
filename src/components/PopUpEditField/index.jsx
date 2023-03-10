@@ -18,8 +18,8 @@ export default function PopUpEditField(props) {
       field: event.target.value,
     }));
   };
-  const handleClickAdd = async () => {
-    const response = await axios.post(
+  const handleClickEdit = async () => {
+    const response = await axios.put(
       `http://localhost:8001/create-content-fields/${props.clickedId}`,
       { field: newFieldName.field },
       { headers: { authorization: localStorage.getItem('token') } }
@@ -46,7 +46,7 @@ export default function PopUpEditField(props) {
           <span className='add-edit-overlay-cancel-button' onClick={handleClickCancel}>
             Cancel
           </span>
-          <span className='add-edit-overlay-add-button' onClick={handleClickAdd}>
+          <span className='add-edit-overlay-add-button' onClick={handleClickEdit}>
             Add
           </span>
         </div>
