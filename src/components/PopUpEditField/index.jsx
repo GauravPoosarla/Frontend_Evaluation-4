@@ -56,7 +56,7 @@ export default function PopUpEditField(props) {
 }
 PopUpEditField.propTypes = {
   setIsEditFieldOverlay: PropTypes.func.isRequired,
-  clickedId: PropTypes.string.isRequired,
+  clickedId: PropTypes.number.isRequired,
   onChanged: PropTypes.bool.isRequired,
   setOnChanged: PropTypes.func.isRequired,
 };

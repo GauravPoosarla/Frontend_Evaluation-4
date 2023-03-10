@@ -38,6 +38,7 @@ const MainContent = () => {
 
   const clickHandler = event => {
     const clickedCollection = collections.find(collection => collection.collection_name === event.target.name);
+    console.log(clickedCollection);
     setClickedId(clickedCollection.id);
   };
 

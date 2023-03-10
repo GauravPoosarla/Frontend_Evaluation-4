@@ -11,6 +11,7 @@ import { useState } from 'react';
 import axios from 'axios';
 
 const FieldRenderer = ({ collections, fields, clickedId, onChanged, setOnChanged }) => {
+  console.log('clickedId', clickedId);
   const content = collections.find(collection => collection.id === clickedId);
   const [isAddEditFieldOverlay, setIsAddEditFieldOverlay] = useState(false);
   const [isEditFieldOverlay, setIsEditFieldOverlay] = useState(false);
@@ -46,6 +47,7 @@ const FieldRenderer = ({ collections, fields, clickedId, onChanged, setOnChanged
           collections={collections}
           collectionName={content.collection_name}
           setIsAddEditFieldOverlay={setIsAddEditFieldOverlay}
+          clickedId={clickedId}
           onChanged={onChanged}
           setOnChanged={setOnChanged}
         />
