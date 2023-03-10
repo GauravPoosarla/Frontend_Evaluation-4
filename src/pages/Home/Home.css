@@ -1,0 +1,12 @@
+.home {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+.home-sidebar {
+  flex: 2;
+}
+
+.home-main-content {
+  flex: 7;
+}
