@@ -9,18 +9,16 @@ import PopUpEditField from '../PopUpEditField';
 import PopUpUpdateContentName from '../PopUpUpdateContentName';
 import { useState } from 'react';
 import axios from 'axios';
-
 const FieldRenderer = ({ collections, fields, clickedId, onChanged, setOnChanged }) => {
-  console.log('clickedId', clickedId);
+  // console.log('clickedId', clickedId);
   const content = collections.find(collection => collection.id === clickedId);
   const [isAddEditFieldOverlay, setIsAddEditFieldOverlay] = useState(false);
   const [isEditFieldOverlay, setIsEditFieldOverlay] = useState(false);
-  const [field, setField] = useState('');
-
+  const [isUpdateContentNameOverlay, setIsUpdateContentNameOverlay] = useState(false);
+  const [field, setField] = useState(0);
   const addHandler = () => {
     setIsAddEditFieldOverlay(true);
   };
-
   const deleteHandler = async field => {
     const response = await axios.get(`http://localhost:8001/get-content-fields/${clickedId}`, {
       headers: { authorization: localStorage.getItem('token') },
@@ -31,15 +29,18 @@ const FieldRenderer = ({ collections, fields, clickedId, onChanged, setOnChanged
     });
     setOnChanged(!onChanged);
   };
-
-  const editHandler = () => {
+  const editHandler = async field => {
     setIsEditFieldOverlay(true);
+    const response = await axios.get(`http://localhost:8001/get-content-fields/${clickedId}`, {
+      headers: { authorization: localStorage.getItem('token') },
+    });
+    const fieldId = response.data.find(fieldContent => fieldContent.fields === field).field_id;
+    setField(fieldId);
+    setOnChanged(!onChanged);
   };
-
   const updateNameHandler = () => {
-    setIsEditFieldOverlay(true);
+    setIsUpdateContentNameOverlay(true);
   };
-
   return (
     <div className='field-renderer'>
       {isAddEditFieldOverlay && (
@@ -62,11 +63,11 @@ const FieldRenderer = ({ collections, fields, clickedId, onChanged, setOnChanged
           field={field}
         />
       )}
-      {isEditFieldOverlay && (
+      {isUpdateContentNameOverlay && (
         <PopUpUpdateContentName
           collections={collections}
           clickedId={clickedId}
-          setIsEditFieldOverlay={setIsEditFieldOverlay}
+          setIsUpdateContentNameOverlay={setIsUpdateContentNameOverlay}
           onChanged={onChanged}
           setOnChanged={setOnChanged}
           field={field}
@@ -89,12 +90,17 @@ const FieldRenderer = ({ collections, fields, clickedId, onChanged, setOnChanged
           <button className='field-renderer-add-button' onClick={addHandler}>
             <div className='field-renderer-add-button-text'>Add Field</div>
           </button>
-
           {fields.map((field, idx) => (
             <button className='field-renderer-button' key={idx}>
               <div>{field}</div> <div className='field-renderer-button-text'>{'Text'}</div>
               <div>
-                <img src={Edit} alt='edit' onClick={editHandler} />{' '}
+                <img
+                  src={Edit}
+                  alt='edit'
+                  onClick={() => {
+                    editHandler(field);
+                  }}
+                />{' '}
                 <img
                   src={Delete}
                   alt='delete'
@@ -110,7 +116,6 @@ const FieldRenderer = ({ collections, fields, clickedId, onChanged, setOnChanged
     </div>
   );
 };
-
 FieldRenderer.propTypes = {
   collections: PropTypes.array.isRequired,
   fields: PropTypes.array.isRequired,
@@ -118,5 +123,4 @@ FieldRenderer.propTypes = {
   onChanged: PropTypes.bool.isRequired,
   setOnChanged: PropTypes.func.isRequired,
 };
-
 export default FieldRenderer;

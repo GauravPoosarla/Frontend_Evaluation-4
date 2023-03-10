@@ -4,13 +4,12 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import './PopUpUpdateContentName.css';
 export default function PopUpUpdateContentName(props) {
-  const { collections, collectionName, onChanged, setOnChanged } = props;
+  const { onChanged, setOnChanged, clickedId } = props;
   const [newFieldName, setNewFieldName] = useState({
     field: '',
   });
-
   const handleClickCancel = () => {
-    props.setIsEditFieldOverlay(false);
+    props.setIsUpdateContentNameOverlay(false);
   };
   const handleChangeFieldName = event => {
     setNewFieldName(previousData => ({
@@ -18,18 +17,13 @@ export default function PopUpUpdateContentName(props) {
       field: event.target.value,
     }));
   };
-
-  const collectionId = collections.filter(collection => collection.name === collectionName)[0].collection_id;
-  console.log(collectionId);
-
   const handleClickAdd = async () => {
-    console.log(newFieldName.field);
     const response = await axios.put(
-      `http://localhost:8001/update-collection/${collectionId}`,
+      `http://localhost:8001/update-collection/${clickedId}`,
       { collectionName: newFieldName.field },
       { headers: { authorization: localStorage.getItem('token') } }
     );
-    props.setIsEditFieldOverlay(false);
+    props.setIsUpdateContentNameOverlay(false);
     setOnChanged(!onChanged);
   };
   return (
@@ -60,9 +54,10 @@ export default function PopUpUpdateContentName(props) {
   );
 }
 PopUpUpdateContentName.propTypes = {
-  setIsEditFieldOverlay: PropTypes.func.isRequired,
   collections: PropTypes.arrayOf(PropTypes.object).isRequired,
   collectionName: PropTypes.string.isRequired,
   onChanged: PropTypes.bool.isRequired,
   setOnChanged: PropTypes.func.isRequired,
+  setIsUpdateContentNameOverlay: PropTypes.func.isRequired,
+  clickedId: PropTypes.string.isRequired,
 };

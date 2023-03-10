@@ -8,7 +8,6 @@ export default function PopUpEditField(props) {
   const [newFieldName, setNewFieldName] = useState({
     field: '',
   });
-
   const handleClickCancel = () => {
     props.setIsEditFieldOverlay(false);
   };
@@ -19,9 +18,9 @@ export default function PopUpEditField(props) {
     }));
   };
   const handleClickAdd = async () => {
-    const response = await axios.post(
-      `http://localhost:8001/create-content-fields/${props.clickedId}`,
-      { field: newFieldName.field },
+    const response = await axios.put(
+      `http://localhost:8001/update-collection/${props.clickedId}`,
+      { collectionName: newFieldName.field },
       { headers: { authorization: localStorage.getItem('token') } }
     );
     props.setIsEditFieldOverlay(false);
@@ -31,7 +30,7 @@ export default function PopUpEditField(props) {
     <div className='add-edit-overlay-wrapper'>
       <div className='add-edit-overlay-content'>
         <div className='add-edit-overlay-top'>
-          <span className='header-top'>Add Field</span>
+          <span className='header-top'>Edit Field</span>
         </div>
         <div className='add-edit-overlay-middle'>
           <span className='add-edit-overlay-content-name'>Field Name</span>
